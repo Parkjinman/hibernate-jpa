@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://10.10.50.157:5432/restapi
+    username: restapi
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+    jpa:
+      hibernate:
+        # ddl-auto
+        # 1. table drop ? ???
+        # 2. applcation? ???? db? ????
+        # 3. ???? ?? X
+        ddl-auto: create
+      properties:
+        hibernate:
+          # show_sql
+          # 1. jpa ??? console? ??
+          ## show_sql: true
+          # format_sql
+          # 1. formmating? ?? ??? ??? ??
+          format_sql: true
+
+logging.level:
+  # org.hibernate.sql
+  # 1. log file? jpa ??? ??
+  org.hibernate.sql: debug
+  # org.hibernate.type
+  # 1. ?????? ?? ?? ??.
+  ## org.hibernate.type: trace
