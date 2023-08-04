@@ -19,15 +19,13 @@ public class JpaMain {
         try {
 
             Member member = new Member();
-            member.setId(101L);
-            member.setName("HelloJPA");
-            member.setAge(15);
+            member.setUsername("C");
 
-            System.out.println("=== BEFORE ===");
+            System.out.println("===========");
             em.persist(member);
-            System.out.println("=== AFTER ===");
+            System.out.println("member.id = " + member.getId());
+            System.out.println("===========");
 
-            System.out.println("=================");
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,100 +38,100 @@ public class JpaMain {
     }
 
     // 준영속 상태로 만드는 법
-    static void permanenceContextDetach(EntityManager em) {
-        Member member = em.find(Member.class, 150L);
-        member.setName("AAAAA");
-
-        // 영속성 컨텍스트에 있는 member 초기화
-        em.detach(member);
-
-        // 영속성 컨텍스트에 있는 모든 데이터 전체 초기화
-        em.clear();
-
-        // 영속성 컨텍스트 종료
-        em.close();
-    }
-
-    // 전체 커밋이 아닌 개별적으로 실행하는 방법
-    static void permanenceContextFlush(EntityManager em) {
-        Member member = new Member(200L, "member200", 15);
-        em.persist(member);
-
-        // 쓰기 지연 SQL 저장소에 있는 query를 DB에서 실행 시킨다.
-        // tx.commit(); → 이것과 기능은 같다.
-        em.flush();
-
-        System.out.println("=================");
-    }
-
-    // 영속성 컨텍스트 설명
-    static void permanenceContextExplanation(EntityManager em, EntityTransaction tx) {
-        Member member = new Member();
-        member.setId(101L);
-        member.setName("HelloJPA");
-        member.setAge(15);
-
-        System.out.println("=== BEFORE ===");
-        em.persist(member);
-        System.out.println("=== AFTER ===");
-
-        Member findMember = em.find(Member.class, 101L);
-
-        System.out.println("findMember.id = " + findMember.getId());
-        System.out.println("findMember.name = " + findMember.getName());
-
-        // 이때 insert 쿼리가 실행 하지만 select 쿼리는 실행하지 않음.
-        // 이유는 1차 캐시인 영속성 컨텍스트에서 101L에 해당하는 값을 가져오기 때문
-        // 만약 101L 값이 영속성 컨텍스트에 없는 경우 DB에서 값을 가져옴.
-        tx.commit();
-    }
-
-    // Member Table jpql로 query작성 후 select
-    static void selectJpqlMember(EntityManager em) {
-        List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                .setFirstResult(1)
-                .setMaxResults(8)
-                .getResultList();
-
-        for (Member member : result) {
-            System.out.println("member.name = " + member.getName());
-        }
-    }
-
-    // Member Table insert query execute
-    static void insertMember(EntityManager em) {
-        // 비영속
-        Member member = new Member();
-        member.setId(2L);
-        member.setName("HelloB");
-
-        // 영속
-        em.persist(member);
-
-        // 준영속 - member 엔티티를 영속성 컨텍스트에서 분리
-        /*em.detach(member);*/
-
-        // 삭제 - 객체를 삭제
-        /*em.remove(member);*/
-    }
-
-    // Member Table select query execute
-    static void selectMember(EntityManager em) {
-        Member findMember = em.find(Member.class, 1L);
-
-        System.out.println("findMember.id = " + findMember.getId());
-        System.out.println("findMember.name = " + findMember.getName());
-    }
-
-    // Member Table update query execute
-    static void updateMember(EntityManager em) {
-        Member findMember = em.find(Member.class, 1L);
-        findMember.setName("HelloJPA");
-
-        // 아래 persist없이도 자동으로 findMember에 대한 값을 database에서 바꿔줌
-        // em.persist(findMember);
-
-        System.out.println("findMember.id = " + findMember.getId());
-        System.out.println("findMember.name = " + findMember.getName());
-    }
+//    static void permanenceContextDetach(EntityManager em) {
+//        Member member = em.find(Member.class, 150L);
+//        member.setName("AAAAA");
+//
+//        // 영속성 컨텍스트에 있는 member 초기화
+//        em.detach(member);
+//
+//        // 영속성 컨텍스트에 있는 모든 데이터 전체 초기화
+//        em.clear();
+//
+//        // 영속성 컨텍스트 종료
+//        em.close();
+//    }
+//
+//    // 전체 커밋이 아닌 개별적으로 실행하는 방법
+//    static void permanenceContextFlush(EntityManager em) {
+//        Member member = new Member(200L, "member200", 15);
+//        em.persist(member);
+//
+//        // 쓰기 지연 SQL 저장소에 있는 query를 DB에서 실행 시킨다.
+//        // tx.commit(); → 이것과 기능은 같다.
+//        em.flush();
+//
+//        System.out.println("=================");
+//    }
+//
+//    // 영속성 컨텍스트 설명
+//    static void permanenceContextExplanation(EntityManager em, EntityTransaction tx) {
+//        Member member = new Member();
+//        member.setId(101L);
+//        member.setName("HelloJPA");
+//        member.setAge(15);
+//
+//        System.out.println("=== BEFORE ===");
+//        em.persist(member);
+//        System.out.println("=== AFTER ===");
+//
+//        Member findMember = em.find(Member.class, 101L);
+//
+//        System.out.println("findMember.id = " + findMember.getId());
+//        System.out.println("findMember.name = " + findMember.getName());
+//
+//        // 이때 insert 쿼리가 실행 하지만 select 쿼리는 실행하지 않음.
+//        // 이유는 1차 캐시인 영속성 컨텍스트에서 101L에 해당하는 값을 가져오기 때문
+//        // 만약 101L 값이 영속성 컨텍스트에 없는 경우 DB에서 값을 가져옴.
+//        tx.commit();
+//    }
+//
+//    // Member Table jpql로 query작성 후 select
+//    static void selectJpqlMember(EntityManager em) {
+//        List<Member> result = em.createQuery("select m from Member as m", Member.class)
+//                .setFirstResult(1)
+//                .setMaxResults(8)
+//                .getResultList();
+//
+//        for (Member member : result) {
+//            System.out.println("member.name = " + member.getName());
+//        }
+//    }
+//
+//    // Member Table insert query execute
+//    static void insertMember(EntityManager em) {
+//        // 비영속
+//        Member member = new Member();
+//        member.setId(2L);
+//        member.setName("HelloB");
+//
+//        // 영속
+//        em.persist(member);
+//
+//        // 준영속 - member 엔티티를 영속성 컨텍스트에서 분리
+//        /*em.detach(member);*/
+//
+//        // 삭제 - 객체를 삭제
+//        /*em.remove(member);*/
+//    }
+//
+//    // Member Table select query execute
+//    static void selectMember(EntityManager em) {
+//        Member findMember = em.find(Member.class, 1L);
+//
+//        System.out.println("findMember.id = " + findMember.getId());
+//        System.out.println("findMember.name = " + findMember.getName());
+//    }
+//
+//    // Member Table update query execute
+//    static void updateMember(EntityManager em) {
+//        Member findMember = em.find(Member.class, 1L);
+//        findMember.setName("HelloJPA");
+//
+//        // 아래 persist없이도 자동으로 findMember에 대한 값을 database에서 바꿔줌
+//        // em.persist(findMember);
+//
+//        System.out.println("findMember.id = " + findMember.getId());
+//        System.out.println("findMember.name = " + findMember.getName());
+//    }
 }
