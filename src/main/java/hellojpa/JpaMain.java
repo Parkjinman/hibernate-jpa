@@ -18,16 +18,19 @@ public class JpaMain {
 
         try {
 
-            Member member1 = new Member(150L, "A");
-            Member member2 = new Member(160L, "B");
+            Member member = new Member();
+            member.setId(101L);
+            member.setName("HelloJPA");
+            member.setAge(15);
 
-            em.persist(member1);
-            em.persist(member2);
+            System.out.println("=== BEFORE ===");
+            em.persist(member);
+            System.out.println("=== AFTER ===");
 
             System.out.println("=================");
-
             tx.commit();
         } catch (Exception e) {
+            e.printStackTrace();
             tx.rollback();
         } finally {
             em.close();
@@ -36,11 +39,39 @@ public class JpaMain {
         emf.close();
     }
 
+    // 준영속 상태로 만드는 법
+    static void permanenceContextDetach(EntityManager em) {
+        Member member = em.find(Member.class, 150L);
+        member.setName("AAAAA");
+
+        // 영속성 컨텍스트에 있는 member 초기화
+        em.detach(member);
+
+        // 영속성 컨텍스트에 있는 모든 데이터 전체 초기화
+        em.clear();
+
+        // 영속성 컨텍스트 종료
+        em.close();
+    }
+
+    // 전체 커밋이 아닌 개별적으로 실행하는 방법
+    static void permanenceContextFlush(EntityManager em) {
+        Member member = new Member(200L, "member200", 15);
+        em.persist(member);
+
+        // 쓰기 지연 SQL 저장소에 있는 query를 DB에서 실행 시킨다.
+        // tx.commit(); → 이것과 기능은 같다.
+        em.flush();
+
+        System.out.println("=================");
+    }
+
     // 영속성 컨텍스트 설명
     static void permanenceContextExplanation(EntityManager em, EntityTransaction tx) {
         Member member = new Member();
         member.setId(101L);
         member.setName("HelloJPA");
+        member.setAge(15);
 
         System.out.println("=== BEFORE ===");
         em.persist(member);
