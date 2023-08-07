@@ -13,18 +13,21 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-// allocationSize를 사용하면 첫 실행 시 메모리에 50개를 먼저 쌓아놓고 사용하기 때문에 부하가 줄어듬 : 성능 ↑
-@SequenceGenerator(name = "test", sequenceName = "test_seq", initialValue = 1, allocationSize = 50)
 public class Member {
 
-    @Id
-    // id값이 auto increament 방식이어서 id값을 DB에서 생성 후 알 수 있기 때문
-    // 트랜잭션 커밋 시 insert하지 않고 persist를 하는 경우 바로 insert를 한다.
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "USERNAME")
     private String username;
+
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     public Member() {
     }

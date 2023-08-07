@@ -28,6 +28,32 @@ public class JpaMain {
         emf.close();
     }
 
+    // 객체 지향 설계 했을때 테이블은 외래키를 참조 하지만
+    // 객체는 객체 전체를 참조한다.
+    static void selectObjectOrientedDesign(EntityManager em) {
+        Team team = new Team();
+        team.setName("TeamA");
+        em.persist(team);
+
+        Member member = new Member();
+        member. setUsername("member1");
+//            member.setTeamId(team.getId());
+        member.setTeam(team);
+        em.persist(member);
+
+        em.flush();
+        em.clear();
+
+        Member findMember = em.find(Member.class, member.getId());
+
+        Team findTeam = findMember.getTeam();
+        System.out.println("findTeam = " + findTeam.getName());
+
+        // 100번에 있는 팀정보를 가져온 후 찾는 멤버에 저장한다.
+        Team newTeam = em.find(Team.class, 100L);
+        findMember.setTeam(newTeam);
+    }
+
     // 준영속 상태로 만드는 법
 //    static void permanenceContextDetach(EntityManager em) {
 //        Member member = em.find(Member.class, 150L);

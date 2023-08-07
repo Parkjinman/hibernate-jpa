@@ -38,7 +38,7 @@
         - none: 사용하지 않음
        2) 운영에서는 create, create-drop, update는 사용 금지
       -->
-      <property name="hibernate.hbm2ddl.auto" value="create" />
+      <property name="hibernate.hbm2ddl.auto" value="update" />
     </properties>
   </persistence-unit>
 </persistence>
