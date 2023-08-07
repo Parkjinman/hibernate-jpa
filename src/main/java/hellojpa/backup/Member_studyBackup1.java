@@ -4,7 +4,7 @@
  * @since       : 2023-08-03
  * JPA - 객체와 테이블을 매핑하는 클래스
  */
-package hellojpa;
+package hellojpa.backup;
 
 import lombok.Getter;
 import lombok.Setter;
