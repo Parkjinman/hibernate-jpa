@@ -8,7 +8,7 @@ import javax.persistence.Persistence;
 public class JpaDomain {
 
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
 
         EntityManager em = emf.createEntityManager();
 
